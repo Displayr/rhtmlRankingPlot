@@ -20,6 +20,7 @@ A HTMLWidget that ...
 
 Scenario 1: Blah blah
 }
+
 \examples{
 
 rhtmlTemplate::template('{}')
@@ -28,4 +29,3 @@ rhtmlTemplate::template('{}')
 \author{
 First Last <first.last@gmail.com>
 }
-

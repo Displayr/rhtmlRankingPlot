@@ -5,7 +5,7 @@ An R HTMLWidget project template.
 # Installation in R
 
 1. `library(devtools)`
-1. `install_github('Displayr/rhtmlTemplate', auth_token='????????????????????')`
+1. `install_github('Displayr/rhtmlTemplate')`
 
 Simplest Example to verify installation:
 
