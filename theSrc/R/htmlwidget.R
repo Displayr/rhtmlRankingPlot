@@ -16,7 +16,7 @@
 #'
 #' @author First Last <first.last@gmail.com>
 #'
-#' @source https://github.com/NumbersInternational/rhtmlTemplate
+#' @source https://github.com/Displayr/rhtmlTemplate
 #'
 #' @import htmlwidgets
 #'

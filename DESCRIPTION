@@ -7,4 +7,4 @@ Maintainer: Kyle Zeeuwen <kyle.zeeuwen@gmail.com>
 Description: An opinionated template for the creation of html widget repositories using ES6
 License: Numbers International Pty Ltd
 LazyData: TRUE
-RoxygenNote: 6.0.0
+RoxygenNote: 5.0.1

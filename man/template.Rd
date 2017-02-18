@@ -4,7 +4,7 @@
 \alias{template}
 \title{rhtmlTemplate HTML Widget}
 \source{
-https://github.com/NumbersInternational/rhtmlTemplate
+https://github.com/Displayr/rhtmlTemplate
 }
 \usage{
 template(settingsJsonString = "{}")
@@ -20,7 +20,6 @@ A HTMLWidget that ...
 
 Scenario 1: Blah blah
 }
-
 \examples{
 
 rhtmlTemplate::template('{}')
@@ -29,3 +28,4 @@ rhtmlTemplate::template('{}')
 \author{
 First Last <first.last@gmail.com>
 }
+
