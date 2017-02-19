@@ -1,6 +1,6 @@
 # rhtmlRankingPlot
 
-An R HTMLWidget project template.
+A HTMLwidget for R that creates ranking plots.
 
 # Installation in R
 
