@@ -24,7 +24,12 @@
   <p>In all of the content page types, (i.e. tutorials, examples, regression_suites, and bugs/improvements) we can place a widget config inside a section marked with <span class="code">class="example"</span> and this will cause a widget to be drawn!</p>
   <div snapshot-name="default-colors">
     <div class="row" data-ex-w="400" data-ex-h="400">
-      <pre class="example">{ "initialState": { "selected": "green" } }</pre>
+      <pre class="example">
+        {
+          "initialState": { "selected": "red" }
+          "columns: 3
+        }
+      </pre>
     </div>
   </div>
 </section>

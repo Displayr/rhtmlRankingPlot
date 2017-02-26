@@ -41,9 +41,13 @@ const addExampleTo = function (rowConfig) {
   element.addClass(exampleNumber);
 
   const exampleConfig = _.defaults($(this).data(), rowConfig);
+  console.log('Example config:');
+  console.log(exampleConfig);
 
   const configString = element.text();
   const templateConfig = JSON.parse(configString);
+  console.log('Template Config:');
+  console.log(templateConfig);
   element.empty();
 
   const configDiv = $('<div>');

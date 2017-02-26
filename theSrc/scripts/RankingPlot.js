@@ -41,6 +41,15 @@ class RankingPlot extends RhtmlSvgWidget {
     } else {
       this.colors = this.defaultColors;
     }
+
+    // if (_.has(this.config, 'initialState')) {
+    //   if (_.has(this.config.initialState, 'selected')) {
+    //     this.state = this.config.initialState.selected;
+    //   }
+    // }
+    console.log('here');
+    console.log(this.state);
+    console.log(this.config);
   }
 
   _getColor(index) {
@@ -121,4 +130,4 @@ class RankingPlot extends RhtmlSvgWidget {
   }
 }
 
-module.exports = Template;
+module.exports = RankingPlot;

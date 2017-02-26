@@ -1,5 +1,5 @@
 /** A group of items in rank order plus a label for the group */
-class Ranking {
+class RankingDataObj {
     let label;
     /** Array of unique (per this structure) ids in rank order */
     let items = [];
@@ -13,7 +13,7 @@ class Ranking {
      */
     let ties;
 
-    constructor(label, items, ties, labels?) {
+    constructor(label, items, ties, labels = null) {
         this.label = label;
         this.items = items;
         this.ties = ties || [];
