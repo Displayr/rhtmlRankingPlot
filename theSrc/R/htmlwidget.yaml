@@ -11,4 +11,4 @@ dependencies:
    version: 1.0.0
    src: htmlwidgets
    script:
-     - rhtmlTemplate.js.map
+     - rhtmlRanking.js.map

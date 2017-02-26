@@ -37,9 +37,9 @@ You will need to modify some files before you get to the coding part. Everything
 * **./theSrc/internal_www/js/renderContentPage.js** - change Template in two places so that this file imports and instantiates your widget, not the template widget
 * **./theSrc/R/htmlwidget.R** - update the widget name and keep the R docs up to date
 * **./theSrc/R/htmlwidget.yaml** - change the name of the map file
-* **./theSrc/scripts/rhtmlTemplate.js** - rename file to match your widget name, update the widget name in the file. Note the file name (without the .js extension) must match the widget name specified in the createWidget call in `htmlwidget.R`
-* **./theSrc/scripts/Template.js** - this is the top level class that encapsulates the business logic of the widget. You will need to rename the file to something the makes sense for your widget (e.g., Pictograph), and update most of the file. There are instructions in the file for what needs to stay the same and what should be changed. It is worth reading [how the code works](./how_the_code_works.md) before starting.
-* **./theSrc/scripts/Template.spec.js** - this tests Template.js. You will need to rename it and write some tests.
+* **./theSrc/scripts/rhtmlRanking.js** - rename file to match your widget name, update the widget name in the file. Note the file name (without the .js extension) must match the widget name specified in the createWidget call in `htmlwidget.R`
+* **./theSrc/scripts/RankingPlot.js** - this is the top level class that encapsulates the business logic of the widget. You will need to rename the file to something the makes sense for your widget (e.g., Pictograph), and update most of the file. There are instructions in the file for what needs to stay the same and what should be changed. It is worth reading [how the code works](./how_the_code_works.md) before starting.
+* **./theSrc/scripts/Ranking.spec.js** - this tests RankingPlot.js. You will need to rename it and write some tests.
 
 That should be it. If you follow the instructions above you shouldn't have to change anything else, but you are free to structure things how you like, it will just require some modifications to `gulpfile.js`.
 
@@ -47,7 +47,7 @@ Final note you should delete the template docs out of the `docs/` folder and you
 Happy coding :)
 
 ## Adding a new JS dependency
-Currently the rhtmlTemplate uses `lodash`, `jquery`, and `d3` as JS dependencies. These dependencies are listed in `package.json`, and installed when you run `npm install`. They are imported by the `.js` files that require them, in our case [Template.js](/theSrc/scripts/Template.js) uses `lodash` and [rhtmlSvgWidget.js](/theSrc/scripts/rhtmlSvgWidget.js) uses all three. Note that dependencies are "bundled" with our code into a single minified dist file using `browserify`. This is discussed in the [htmlwidget build system](./htmlwidget_build_system.md) docs. If you need to add package X to your new widget, here are the steps:
+Currently the rhtmlTemplate uses `lodash`, `jquery`, and `d3` as JS dependencies. These dependencies are listed in `package.json`, and installed when you run `npm install`. They are imported by the `.js` files that require them, in our case [RankingPlot.js](/theSrc/scripts/RankingPlot.js) uses `lodash` and [rhtmlSvgWidget.js](/theSrc/scripts/rhtmlSvgWidget.js) uses all three. Note that dependencies are "bundled" with our code into a single minified dist file using `browserify`. This is discussed in the [htmlwidget build system](./htmlwidget_build_system.md) docs. If you need to add package X to your new widget, here are the steps:
 
 1. Install the module from npm and save it to the list of dependencies via `npm install --save X`. This will install the module locally in node_modules, and it will add it to the list of project dependencies in `package.json`
 1. use the `import` command in the file that requires the module to import the module.

@@ -382,7 +382,6 @@ interface IEditableJavaScriptItem {
 }
 
 module Data {
-    import OutputObject = QServerRequestsCommon.OutputObject;
     import DataPoint = QServerRequestsCommon.DataPoint;
     import DimensionElement = QServerRequestsCommon.DimensionElement;
     import Dimension = QServerRequestsCommon.Dimension;

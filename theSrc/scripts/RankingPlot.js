@@ -4,17 +4,17 @@
  //   then rewrite _processConfig and
 
 import _ from 'lodash';
-import TemplateDependency from './TemplateDependency';
+import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
 
-class Template extends RhtmlSvgWidget {
+class RankingPlot extends RhtmlSvgWidget {
 
   constructor(el, width, height) {
     super(el, width, height);
 
-    // NB TemplateDependency is not used,
+    // NB RankingDependency is not used,
     // it simply shows how to import and structure intra project dependencies
-    const throwAway = new TemplateDependency();
+    const throwAway = new RankingDependency();
     throwAway.doThings();
 
     this.state = {

@@ -1,5 +1,5 @@
 // TEMPLATE! - this import and the tests will need to be changed to match the logic and naming of your widget
-import Template from './Template';
+import Template from './RankingPlot';
 import $ from 'jquery';
 
 describe('Template class:', () => {

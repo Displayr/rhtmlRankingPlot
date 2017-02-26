@@ -1,12 +1,12 @@
 
 import _ from 'lodash';
-import Template from './Template';
+import Template from './RankingPlot';
 import DisplayError from './DisplayError';
 
 // TEMPLATE! - update the template name below. Rename this file to match your widget name.
 //  -In theory you dont ned to change anything else, but you can at your own discretion
 HTMLWidgets.widget({
-  name: 'rhtmlTemplate',
+  name: 'rhtmlRankingPlot',
   type: 'output',
 
   resize(el, width, height, instance) {
@@ -15,7 +15,7 @@ HTMLWidgets.widget({
 
   initialize(el, width, height) {
     // TEMPLATE! - update the class name below to the name of your main class
-    return new Template(el, width, height);
+    return new RankingPlot(el, width, height);
   },
 
   renderValue(el, incomingConfig, instance) {
