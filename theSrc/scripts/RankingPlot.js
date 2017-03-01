@@ -84,6 +84,7 @@ class RankingPlot extends RhtmlSvgWidget {
     enteringCells.append('text')
       .attr('class', () => 'text');
 
+
     this._updateText();
     return this._updateRectangles();
   }
