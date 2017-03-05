@@ -6,6 +6,7 @@
 import _ from 'lodash';
 import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
+import SvgUtils from './SvgUtils';
 
 class RankingPlot extends RhtmlSvgWidget {
 
@@ -22,6 +23,8 @@ class RankingPlot extends RhtmlSvgWidget {
     };
 
     this.defaultColors = ['red', 'blue', 'green', 'orange'];
+    this.defaultRows = {};
+    this.defaultCols = [];
   }
 
   _processConfig() {
@@ -47,9 +50,30 @@ class RankingPlot extends RhtmlSvgWidget {
     //     this.state = this.config.initialState.selected;
     //   }
     // }
-    console.log('here');
-    console.log(this.state);
-    console.log(this.config);
+    if (_.has(this.config, 'columns')) {
+      if (!_.isArray(this.config.columns)) {
+        throw new Error("Invalid config. 'columns' must be array");
+      }
+      if (this.config.columns < 1) {
+        throw new Error("Invalid config. 'columns' array must be > 0");
+      }
+      this.cols = this.config.columns;
+    } else {
+      this.cols = this.defaultCols;
+    }
+
+    if (_.has(this.config, 'rows')) {
+      if (!_.isObject(this.config.rows)) {
+        throw new Error("Invalid config. 'rows' must be an Object");
+      }
+      this.rows = this.config.rows;
+    } else {
+      this.rows = this.defaultRows;
+    }
+    this.numRows = _.keys(this.rows).length;
+    console.log('numrows');
+    console.log(this.numRows);
+
   }
 
   _getColor(index) {
@@ -60,6 +84,16 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log('_redraw. Change this function in your rhtmlWidget');
     console.log('the outer SVG has already been created and added to the DOM. You should do things with it');
     console.log(this.outerSvg);
+
+
+    // determine size of largest numRows
+    this.outerSvg;
+
+    const data2 = [
+
+    ];
+
+
 
     const data = [
       { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },

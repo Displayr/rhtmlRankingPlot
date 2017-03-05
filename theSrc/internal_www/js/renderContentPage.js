@@ -1,8 +1,7 @@
 
 import $ from 'jquery';
 import _ from 'lodash';
-// TEMPLATE : you will need to import your widget here
-import Template from '../../scripts/RankingPlot';
+import RankingPlot from '../../scripts/RankingPlot';
 
 let exampleCounter = 0;
 
@@ -45,16 +44,16 @@ const addExampleTo = function (rowConfig) {
   console.log(exampleConfig);
 
   const configString = element.text();
-  const templateConfig = JSON.parse(configString);
-  console.log('Template Config:');
-  console.log(templateConfig);
+  const rankingConfig = JSON.parse(configString);
+  console.log('Ranking Config:');
+  console.log(rankingConfig);
   element.empty();
 
   const configDiv = $('<div>');
   const configPre = $('<pre>')
     .attr('class', 'config')
     .css('height', 'auto')
-    .html(JSON.stringify(templateConfig, {}, 2));
+    .html(JSON.stringify(rankingConfig, {}, 2));
 
   const innerExampleDiv = $('<div>')
     .attr('class', 'inner-example')
@@ -65,8 +64,7 @@ const addExampleTo = function (rowConfig) {
 
   element.append(configDiv.append(configPre));
 
-  // TEMPLATE : you will need to instantiate your widget here
-  const instance = new Template(innerInnerExampleDiv, exampleConfig.exW, exampleConfig.exH);
+  const instance = new RankingPlot(innerInnerExampleDiv, exampleConfig.exW, exampleConfig.exH);
 
   if (exampleConfig.resizeControls) {
     const relativeResizers = $(getRelativeResizersHtml());
@@ -97,7 +95,7 @@ const addExampleTo = function (rowConfig) {
 
   element.append(innerExampleDiv.append(innerInnerExampleDiv));
 
-  instance.setConfig(templateConfig);
+  instance.setConfig(rankingConfig);
   const instanceId = instance.config['table-id'];
   innerInnerExampleDiv.attr('class', `inner-inner-example ${instanceId}`);
 
