@@ -28,8 +28,7 @@ class RankingPlot extends RhtmlSvgWidget {
   }
 
   _processConfig() {
-    console.log('_processConfig. Change this function in your rhtmlWidget');
-    console.log('the config has already been added to the context at @config, you must now "process" it');
+    console.log('_processConfig');
     console.log('config:');
     console.log(this.config);
 
@@ -50,14 +49,19 @@ class RankingPlot extends RhtmlSvgWidget {
     //     this.state = this.config.initialState.selected;
     //   }
     // }
-    if (_.has(this.config, 'columns')) {
-      if (!_.isArray(this.config.columns)) {
-        throw new Error("Invalid config. 'columns' must be array");
+    if (_.has(this.config, 'cols')) {
+      if (!_.isArray(this.config.cols)) {
+        throw new Error("Invalid config. 'cols' must be array");
       }
-      if (this.config.columns < 1) {
-        throw new Error("Invalid config. 'columns' array must be > 0");
+      if (this.config.cols < 1) {
+        throw new Error("Invalid config. 'cols' array must be > 0");
       }
-      this.cols = this.config.columns;
+      this.cols = {};
+      for(let i = 0; i < this.config.cols.length; i++) {
+        this.cols[i] = {
+          'label': this.config.cols[i]
+        };
+      }
     } else {
       this.cols = this.defaultCols;
     }
@@ -71,8 +75,6 @@ class RankingPlot extends RhtmlSvgWidget {
       this.rows = this.defaultRows;
     }
     this.numRows = _.keys(this.rows).length;
-    console.log('numrows');
-    console.log(this.numRows);
 
   }
 
@@ -81,46 +83,52 @@ class RankingPlot extends RhtmlSvgWidget {
   }
 
   _redraw() {
-    console.log('_redraw. Change this function in your rhtmlWidget');
-    console.log('the outer SVG has already been created and added to the DOM. You should do things with it');
+    console.log('_redraw');
     console.log(this.outerSvg);
 
 
-    // determine size of largest numRows
-    this.outerSvg;
+    // Determine size of largest numRows
+    // let largestRowSvg = this.outerSvg.append('text')
+    //                     .attr('x', 10)
+    //                     .attr('y', 100)
+    //                     .attr('class', 'testElem')
+    //                     .text(this.numRows);
+    //
+    // console.log(this.outerSvg.select('.testElem')[0][0].getBBox());
 
+    console.log(SvgUtils().getTextSvgDimensions(this.outerSvg, this.numRows));
     const data2 = [
 
     ];
 
 
 
-    const data = [
-      { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },
-      { color: this._getColor(1), name: this._getColor(1), x: this.initialWidth / 2, y: 0 },
-      { color: this._getColor(2), name: this._getColor(2), x: 0, y: this.initialHeight / 2 },
-      { color: this._getColor(3), name: this._getColor(3), x: this.initialWidth / 2, y: this.initialHeight / 2 },
-    ];
-
-    const allCells = this.outerSvg.selectAll('.node')
-      .data(data);
-
-    const enteringCells = allCells.enter()
-      .append('g')
-        .attr('class', 'node')
-        .attr('transform', d => `translate(${d.x},${d.y})`);
-
-    enteringCells.append('rect')
-      .attr('width', this.initialWidth / 2)
-      .attr('height', this.initialHeight / 2)
-      .attr('class', 'rect');
-
-    enteringCells.append('text')
-      .attr('class', () => 'text');
-
-
-    this._updateText();
-    return this._updateRectangles();
+    // const data = [
+    //   { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },
+    //   { color: this._getColor(1), name: this._getColor(1), x: this.initialWidth / 2, y: 0 },
+    //   { color: this._getColor(2), name: this._getColor(2), x: 0, y: this.initialHeight / 2 },
+    //   { color: this._getColor(3), name: this._getColor(3), x: this.initialWidth / 2, y: this.initialHeight / 2 },
+    // ];
+    //
+    // const allCells = this.outerSvg.selectAll('.node')
+    //   .data(data);
+    //
+    // const enteringCells = allCells.enter()
+    //   .append('g')
+    //     .attr('class', 'node')
+    //     .attr('transform', d => `translate(${d.x},${d.y})`);
+    //
+    // enteringCells.append('rect')
+    //   .attr('width', this.initialWidth / 2)
+    //   .attr('height', this.initialHeight / 2)
+    //   .attr('class', 'rect');
+    //
+    // enteringCells.append('text')
+    //   .attr('class', () => 'text');
+    //
+    //
+    // this._updateText();
+    // return this._updateRectangles();
   }
 
   _updateText() {

@@ -1,37 +1,22 @@
-let instance = undefined;
-let SU = undefined;
 
-class SvgUtils {
-    static initClass() {
-        instance = null;
+let SvgUtils = function() {
 
-        SU = class SU {
-
-            constructor() {}
-
-            setSvgBBoxWidthAndHeight(dataArray, svgArray) {
-                return (() => {
-                    let result = [];
-                    for (let i = 0; i < dataArray.length; i++) {
-                        let dataElem = dataArray[i];
-                        let item;
-                        if ((dataElem.width == null) && (dataElem.height == null)) {
-                            dataElem.width = svgArray[0][i].getBBox().width;
-                            item = dataElem.height = svgArray[0][i].getBBox().height;
-                        }
-                        result.push(item);
-                    }
-                    return result;
-                })();
-            }
-        };
-    }
-
-    static get() {
-        if ((instance == null)) {
-            instance = new SU();
+    return {
+        getTextSvgDimensions: function(svg, text) {
+            svg.append('text')
+               .attr('class', 'testElem')
+               .attr('x', 10)
+               .attr('y', 100)
+               .text(text);
+            let bb = svg.select('.testElem')[0][0].getBBox();
+            return {
+                'width': bb.width,
+                'height': bb.height
+            };
         }
-        return instance;
     }
+};
+
+if (typeof(module) !== 'undefined') {
+    module.exports = SvgUtils;
 }
-SvgUtils.initClass();
