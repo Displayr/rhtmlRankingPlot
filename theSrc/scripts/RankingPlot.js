@@ -25,6 +25,13 @@ class RankingPlot extends RhtmlSvgWidget {
     this.defaultColors = ['red', 'blue', 'green', 'orange'];
     this.defaultRows = {};
     this.defaultCols = [];
+    this.defaultpadding = {
+      'rowNumbering': {
+        'left': 10,
+        'right': 10
+      }
+    };
+
   }
 
   _processConfig() {
@@ -56,11 +63,12 @@ class RankingPlot extends RhtmlSvgWidget {
       if (this.config.cols < 1) {
         throw new Error("Invalid config. 'cols' array must be > 0");
       }
-      this.cols = {};
+      this.cols = [];
       for(let i = 0; i < this.config.cols.length; i++) {
-        this.cols[i] = {
-          'label': this.config.cols[i]
-        };
+        this.cols.push( {
+          'label': this.config.cols[i],
+          'length': this.config.cols[i].length
+        });
       }
     } else {
       this.cols = this.defaultCols;
@@ -74,7 +82,7 @@ class RankingPlot extends RhtmlSvgWidget {
     } else {
       this.rows = this.defaultRows;
     }
-    this.numRows = _.keys(this.rows).length;
+    this.maxRows = {'text': _.keys(this.rows).length};
 
   }
 
@@ -85,22 +93,27 @@ class RankingPlot extends RhtmlSvgWidget {
   _redraw() {
     console.log('_redraw');
     console.log(this.outerSvg);
+    console.log('------------');
+    console.log(this.cols);
 
 
-    // Determine size of largest numRows
-    // let largestRowSvg = this.outerSvg.append('text')
-    //                     .attr('x', 10)
-    //                     .attr('y', 100)
-    //                     .attr('class', 'testElem')
-    //                     .text(this.numRows);
-    //
-    // console.log(this.outerSvg.select('.testElem')[0][0].getBBox());
+    // Determine width of largest maxRows
+    _.extend(this.maxRows, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxRows.text));
 
-    console.log(SvgUtils().getTextSvgDimensions(this.outerSvg, this.numRows));
-    const data2 = [
+    // Determine height of col labels
+    this.maxColLabel = _.maxBy(this.cols, (o) => o.length);
+    _.extend(this.maxColLabel, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxColLabel.label));
+    console.log(this.maxColLabel);
 
-    ];
+    // SvgUtils().getTextSvgDimensions();
 
+    let data = [];
+    for (let i; i < this.maxRows.text; i++) {
+      data.push({
+        x: this.defaultpadding.rowNumbering.left,
+        label: i
+      });
+    }
 
 
     // const data = [
