@@ -22,13 +22,20 @@ class RankingPlot extends RhtmlSvgWidget {
       selected: null
     };
 
+    this.rowsDisplayed = 10;
+
     this.defaultColors = ['red', 'blue', 'green', 'orange'];
     this.defaultRows = {};
     this.defaultCols = [];
-    this.defaultpadding = {
+    this.defaultPadding = {
       'rowNumbering': {
         'left': 10,
         'right': 10
+      },
+
+      'colLabels': {
+        'top': 10,
+        'bottom': 10
       }
     };
 
@@ -94,7 +101,6 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log('_redraw');
     console.log(this.outerSvg);
     console.log('------------');
-    console.log(this.cols);
 
 
     // Determine width of largest maxRows
@@ -103,18 +109,31 @@ class RankingPlot extends RhtmlSvgWidget {
     // Determine height of col labels
     this.maxColLabel = _.maxBy(this.cols, (o) => o.length);
     _.extend(this.maxColLabel, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxColLabel.label));
-    console.log(this.maxColLabel);
 
-    // SvgUtils().getTextSvgDimensions();
+    // Calculate the positions of the row numbers
+    let rowStart = (this.defaultPadding.colLabels.top + this.maxColLabel.height + this.defaultPadding.colLabels.bottom);
+    let rowHeight = (this.initialHeight - rowStart) / this.rowsDisplayed;
 
     let data = [];
-    for (let i; i < this.maxRows.text; i++) {
+    for (let i = 0; i < this.maxRows.text; i++) {
       data.push({
-        x: this.defaultpadding.rowNumbering.left,
-        label: i
+        x: this.defaultPadding.rowNumbering.left + this.maxRows.width,
+        y: rowStart + i*rowHeight,
+        label: String(i) + '.'
       });
     }
 
+    let enteringCells = this.outerSvg.selectAll('.node')
+                            .data(data)
+                            .enter()
+                            .append('text')
+        .attr('class', 'node')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('text-anchor', 'end')
+        .text(d => d.label);
+
+    // TODO: Find positions of the header labels
 
     // const data = [
     //   { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },
