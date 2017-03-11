@@ -199,7 +199,7 @@ class RankingPlot extends RhtmlSvgWidget {
 
     this.yScale = d3.scaleLinear()
         .range([yAxisStart, this.initialHeight - 10])
-        .domain([1,10]);
+        .domain([1,10.25]);
     this.yAxis = d3.axisLeft()
         .scale(this.yScale)
         .ticks(10, '.')
