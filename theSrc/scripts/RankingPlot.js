@@ -160,8 +160,16 @@ class RankingPlot extends RhtmlSvgWidget {
         {x: 'Somewhat agree', y: 8, color: 'green'},
         {x: 'Somewhat agree', y: 9, color: 'red'},
         ];
+
+    this._updateBars(testData);
+
+    let data = [];
+
+  }
+
+  _updateBars(data) {
     this.outerSvg.selectAll('.bar')
-        .data(testData)
+        .data(data)
         .enter()
         .append('rect')
         .attr('class', 'bar')
@@ -170,9 +178,6 @@ class RankingPlot extends RhtmlSvgWidget {
         .attr('width', (d) => this.xScaleBand.bandwidth())
         .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
         .attr('fill', (d) => d.color);
-
-    let data = [];
-
   }
 
   _updateAxis() {
