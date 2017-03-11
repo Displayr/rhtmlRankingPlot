@@ -7,6 +7,7 @@ import _ from 'lodash';
 import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
 import SvgUtils from './SvgUtils';
+import d3 from 'd3';
 
 class RankingPlot extends RhtmlSvgWidget {
 
@@ -38,6 +39,7 @@ class RankingPlot extends RhtmlSvgWidget {
         'bottom': 10
       }
     };
+    this.defaultNumColHeaderLines = 3;
 
   }
 
@@ -109,6 +111,75 @@ class RankingPlot extends RhtmlSvgWidget {
     // Determine height of col labels
     this.maxColLabel = _.maxBy(this.cols, (o) => o.length);
     _.extend(this.maxColLabel, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxColLabel.label));
+    let colSpacing = 5;
+    let colWidth = (this.initialWidth / this.cols.length) - colSpacing*(this.cols.length - 1) - this.maxRows.width;
+
+    let colHeaderLines = this.maxColLabel.width / colWidth;
+    if (colHeaderLines > this.defaultNumColHeaderLines) {
+      colHeaderLines = this.defaultNumColHeaderLines;
+    }
+
+    let x = d3.scale.ordinal().rangeRoundBands([0, this.initialWidth], .1, .3);
+    let xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom');
+
+    x.domain(_.map(this.cols, (o) => o.label));
+
+
+    this.outerSvg.append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', 'translate(0,0)')
+        .call(xAxis)
+        .selectAll('.tick text')
+        .call(wrap, x.rangeBand());
+    d3.select('.x-axis').selectAll('.domain').remove();
+
+    let xAxisDimensions = d3.selectAll('.x-axis').node().getBBox();
+    let yAxisStart = xAxisDimensions.height + xAxisDimensions.x;
+    console.log(d3.selectAll('.x-axis').node().getBBox());
+
+
+
+    let y = d3.scale.linear().range([0,this.initialHeight - yAxisStart - 10 ]);
+    let yAxis = d3.svg.axis()
+                  .scale(y)
+                  .orient('left')
+                  .ticks(10, '.')
+                  .tickFormat((d) => { return d + '.'; });
+
+    y.domain([1,10]);
+    let yAxisSvg = this.outerSvg.append('g')
+        .attr('class', 'y-axis')
+        .call(yAxis);
+    d3.select('.y-axis').selectAll('.domain').remove();
+    let yAxisDimensions = d3.selectAll('.y-axis').node().getBBox();
+
+    yAxisSvg.attr('transform', 'translate(0' + yAxisDimensions.width + ',' + yAxisStart + ')');
+
+    function wrap(text, width) {
+        text.each(function() {
+            let text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
+            }
+        });
+    }
 
     // Calculate the positions of the row numbers
     let rowStart = (this.defaultPadding.colLabels.top + this.maxColLabel.height + this.defaultPadding.colLabels.bottom);
@@ -123,17 +194,18 @@ class RankingPlot extends RhtmlSvgWidget {
       });
     }
 
-    let enteringCells = this.outerSvg.selectAll('.node')
-                            .data(data)
-                            .enter()
-                            .append('text')
-        .attr('class', 'node')
-        .attr('x', d => d.x)
-        .attr('y', d => d.y)
-        .attr('text-anchor', 'end')
-        .text(d => d.label);
+    // let enteringCells = this.outerSvg.selectAll('.node')
+    //                         .data(data)
+    //                         .enter()
+    //                         .append('text')
+    //     .attr('class', 'node')
+    //     .attr('x', d => d.x)
+    //     .attr('y', d => d.y)
+    //     .attr('text-anchor', 'end')
+    //     .text(d => d.label);
 
     // TODO: Find positions of the header labels
+
 
     // const data = [
     //   { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },
