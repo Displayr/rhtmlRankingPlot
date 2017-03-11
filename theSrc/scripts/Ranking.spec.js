@@ -35,9 +35,9 @@ describe('Template class:', () => {
         return this.instance.draw();
       });
 
-      it('has four squares', function () {
-        expect($('rect').length).to.equal(4);
-      });
+      // it('has four squares', function () {
+      //   expect($('rect').length).to.equal(4);
+      // });
     });
   });
 });

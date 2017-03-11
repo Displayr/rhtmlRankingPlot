@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import d3 from 'd3';
+import * as d3 from 'd3';
 
 let SvgUtils = function() {
 
@@ -14,7 +14,7 @@ let SvgUtils = function() {
                .attr('x', 10)
                .attr('y', 100)
                .text(text);
-            let bb = svg.select('.testElem')[0][0].getBBox();
+            let bb = svg.select('.testElem').node().getBBox();
             svg.select('.testElem').remove();
             return {
                 'width': bb.width,

@@ -7,7 +7,7 @@ import _ from 'lodash';
 import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
 import SvgUtils from './SvgUtils';
-import d3 from 'd3';
+import * as d3 from "d3";
 
 class RankingPlot extends RhtmlSvgWidget {
 
@@ -104,7 +104,23 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log(this.outerSvg);
     console.log('------------');
     this._updateAxis();
+    // console.log(this.xScale);
+    // console.log(this.yScale);
 
+
+
+
+    // let testData = [{x: 'Strongly agree', y: 1, color: 'blue'}];
+    // this.outerSvg.selectAll('.bar')
+    //     .data(testData)
+    //     .enter()
+    //     .append('rect')
+    //     .attr('class', 'bar')
+    //     .attr('x', (d) => this.xScale(d.x))
+    //     .attr('y', (d) => this.yScale(d.y) + this.yAxisStart)
+    //     .attr('width', (d) => this.xScale.band.bandwidth())
+    //     .attr('height', (d) => this.yScale(d.y))
+    //     .attr('fill', (d) => d.color);
 
 
     let data = [];
@@ -122,40 +138,43 @@ class RankingPlot extends RhtmlSvgWidget {
   }
 
   _updateAxis() {
-    let x = d3.scale.ordinal().rangeRoundBands([0, this.initialWidth], .1, .3);
-    let xAxis = d3.svg.axis()
-        .scale(x)
-        .orient('bottom');
+    // Determine width of largest maxRows
+    _.extend(this.maxRows, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxRows.text));
 
-    x.domain(_.map(this.cols, (o) => o.label));
+    this.xScaleBand = d3.scaleBand().range([this.maxRows.width, this.initialWidth]).round([.1, .3]);
+    this.xAxis = d3.axisBottom().scale(this.xScaleBand);
+
+    this.xScaleBand.domain(_.map(this.cols, (o) => o.label));
+
 
     this.outerSvg.append('g')
         .attr('class', 'x-axis')
-        .attr('transform', 'translate(0,0)')
-        .call(xAxis)
+        .attr('transform', 'translate(0 ,0)')
+        .call(this.xAxis)
         .selectAll('.tick text')
-        .call(SvgUtils().wrap, x.rangeBand());
+        .call(SvgUtils().wrap, this.xScaleBand.bandwidth());
     d3.select('.x-axis').selectAll('.domain').remove();
 
     let xAxisBBox = d3.selectAll('.x-axis').node().getBBox();
+    console.log(d3.selectAll('.x-axis').node());
     let yAxisStart = xAxisBBox.height + xAxisBBox.x;
 
-
-    let y = d3.scale.linear().range([0,this.initialHeight - yAxisStart - 10 ]);
-    let yAxis = d3.svg.axis()
-        .scale(y)
-        .orient('left')
+    this.yScale = d3.scaleLinear().range([0,this.initialHeight - yAxisStart - 10]);
+    this.yAxis = d3.axisLeft()
+        .scale(this.yScale)
         .ticks(10, '.')
         .tickFormat((d) => { return d + '.'; });
 
-    y.domain([1,10]);
+    this.yScale.domain([1,10]);
     let yAxisSvg = this.outerSvg.append('g')
         .attr('class', 'y-axis')
-        .call(yAxis);
+        .call(this.yAxis);
     let yAxisBBox = d3.selectAll('.y-axis').node().getBBox();
 
     d3.select('.y-axis').selectAll('.domain').remove();
-    yAxisSvg.attr('transform', 'translate(0' + yAxisBBox.width + ',' + yAxisStart + ')');
+    yAxisSvg.attr('transform', 'translate(' + yAxisBBox.width + ',' + yAxisStart + ')');
+
+    d3.selectAll('.tick line').remove()
   }
 }
 
