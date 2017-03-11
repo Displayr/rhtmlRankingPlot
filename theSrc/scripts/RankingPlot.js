@@ -103,96 +103,11 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log('_redraw');
     console.log(this.outerSvg);
     console.log('------------');
+    this._updateAxis();
 
 
-    // Determine width of largest maxRows
-    _.extend(this.maxRows, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxRows.text));
-
-    // Determine height of col labels
-    this.maxColLabel = _.maxBy(this.cols, (o) => o.length);
-    _.extend(this.maxColLabel, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxColLabel.label));
-    let colSpacing = 5;
-    let colWidth = (this.initialWidth / this.cols.length) - colSpacing*(this.cols.length - 1) - this.maxRows.width;
-
-    let colHeaderLines = this.maxColLabel.width / colWidth;
-    if (colHeaderLines > this.defaultNumColHeaderLines) {
-      colHeaderLines = this.defaultNumColHeaderLines;
-    }
-
-    let x = d3.scale.ordinal().rangeRoundBands([0, this.initialWidth], .1, .3);
-    let xAxis = d3.svg.axis()
-        .scale(x)
-        .orient('bottom');
-
-    x.domain(_.map(this.cols, (o) => o.label));
-
-
-    this.outerSvg.append('g')
-        .attr('class', 'x-axis')
-        .attr('transform', 'translate(0,0)')
-        .call(xAxis)
-        .selectAll('.tick text')
-        .call(wrap, x.rangeBand());
-    d3.select('.x-axis').selectAll('.domain').remove();
-
-    let xAxisDimensions = d3.selectAll('.x-axis').node().getBBox();
-    let yAxisStart = xAxisDimensions.height + xAxisDimensions.x;
-    console.log(d3.selectAll('.x-axis').node().getBBox());
-
-
-
-    let y = d3.scale.linear().range([0,this.initialHeight - yAxisStart - 10 ]);
-    let yAxis = d3.svg.axis()
-                  .scale(y)
-                  .orient('left')
-                  .ticks(10, '.')
-                  .tickFormat((d) => { return d + '.'; });
-
-    y.domain([1,10]);
-    let yAxisSvg = this.outerSvg.append('g')
-        .attr('class', 'y-axis')
-        .call(yAxis);
-    d3.select('.y-axis').selectAll('.domain').remove();
-    let yAxisDimensions = d3.selectAll('.y-axis').node().getBBox();
-
-    yAxisSvg.attr('transform', 'translate(0' + yAxisDimensions.width + ',' + yAxisStart + ')');
-
-    function wrap(text, width) {
-        text.each(function() {
-            let text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.1, // ems
-                y = text.attr("y"),
-                dy = parseFloat(text.attr("dy")),
-                tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                }
-            }
-        });
-    }
-
-    // Calculate the positions of the row numbers
-    let rowStart = (this.defaultPadding.colLabels.top + this.maxColLabel.height + this.defaultPadding.colLabels.bottom);
-    let rowHeight = (this.initialHeight - rowStart) / this.rowsDisplayed;
 
     let data = [];
-    for (let i = 0; i < this.maxRows.text; i++) {
-      data.push({
-        x: this.defaultPadding.rowNumbering.left + this.maxRows.width,
-        y: rowStart + i*rowHeight,
-        label: String(i) + '.'
-      });
-    }
 
     // let enteringCells = this.outerSvg.selectAll('.node')
     //                         .data(data)
@@ -204,35 +119,43 @@ class RankingPlot extends RhtmlSvgWidget {
     //     .attr('text-anchor', 'end')
     //     .text(d => d.label);
 
-    // TODO: Find positions of the header labels
+  }
+
+  _updateAxis() {
+    let x = d3.scale.ordinal().rangeRoundBands([0, this.initialWidth], .1, .3);
+    let xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom');
+
+    x.domain(_.map(this.cols, (o) => o.label));
+
+    this.outerSvg.append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', 'translate(0,0)')
+        .call(xAxis)
+        .selectAll('.tick text')
+        .call(SvgUtils().wrap, x.rangeBand());
+
+    let xAxisBBox = d3.selectAll('.x-axis').node().getBBox();
+    let yAxisStart = xAxisBBox.height + xAxisBBox.x;
 
 
-    // const data = [
-    //   { color: this._getColor(0), name: this._getColor(0), x: 0, y: 0 },
-    //   { color: this._getColor(1), name: this._getColor(1), x: this.initialWidth / 2, y: 0 },
-    //   { color: this._getColor(2), name: this._getColor(2), x: 0, y: this.initialHeight / 2 },
-    //   { color: this._getColor(3), name: this._getColor(3), x: this.initialWidth / 2, y: this.initialHeight / 2 },
-    // ];
-    //
-    // const allCells = this.outerSvg.selectAll('.node')
-    //   .data(data);
-    //
-    // const enteringCells = allCells.enter()
-    //   .append('g')
-    //     .attr('class', 'node')
-    //     .attr('transform', d => `translate(${d.x},${d.y})`);
-    //
-    // enteringCells.append('rect')
-    //   .attr('width', this.initialWidth / 2)
-    //   .attr('height', this.initialHeight / 2)
-    //   .attr('class', 'rect');
-    //
-    // enteringCells.append('text')
-    //   .attr('class', () => 'text');
-    //
-    //
-    // this._updateText();
-    // return this._updateRectangles();
+    let y = d3.scale.linear().range([0,this.initialHeight - yAxisStart - 10 ]);
+    let yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .ticks(10, '.')
+        .tickFormat((d) => { return d + '.'; });
+
+    y.domain([1,10]);
+    let yAxisSvg = this.outerSvg.append('g')
+        .attr('class', 'y-axis')
+        .call(yAxis);
+    let yAxisBBox = d3.selectAll('.y-axis').node().getBBox();
+
+    d3.select('.x-axis').selectAll('.domain').remove();
+    d3.select('.y-axis').selectAll('.domain').remove();
+    yAxisSvg.attr('transform', 'translate(0' + yAxisBBox.width + ',' + yAxisStart + ')');
   }
 
   _updateText() {
