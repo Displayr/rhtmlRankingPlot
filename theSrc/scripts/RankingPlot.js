@@ -135,6 +135,7 @@ class RankingPlot extends RhtmlSvgWidget {
         .call(xAxis)
         .selectAll('.tick text')
         .call(SvgUtils().wrap, x.rangeBand());
+    d3.select('.x-axis').selectAll('.domain').remove();
 
     let xAxisBBox = d3.selectAll('.x-axis').node().getBBox();
     let yAxisStart = xAxisBBox.height + xAxisBBox.x;
@@ -153,50 +154,8 @@ class RankingPlot extends RhtmlSvgWidget {
         .call(yAxis);
     let yAxisBBox = d3.selectAll('.y-axis').node().getBBox();
 
-    d3.select('.x-axis').selectAll('.domain').remove();
     d3.select('.y-axis').selectAll('.domain').remove();
     yAxisSvg.attr('transform', 'translate(0' + yAxisBBox.width + ',' + yAxisStart + ')');
-  }
-
-  _updateText() {
-    this.outerSvg.selectAll('.text')
-      .attr('x', () => this.initialWidth / 4) // note this is the midpoint (thats why we divide by 4 not 2)
-      .attr('y', () => this.initialHeight / 4) // same midpoint consideration
-      .style('text-anchor', 'middle')
-      .style('dominant-baseline', 'central')
-      .style('fill', 'white')
-      .style('font-weight', (d) => {
-        if (d.name === this.state.selected) {
-          return 900;
-        }
-        return 200;
-      })
-      .style('font-size', (d) => {
-        if (d.name === this.state.selected) {
-          return 60;
-        }
-        return 18;
-      })
-      .text(d => d.name)
-      .attr('class', d => `text ${d.name}`)
-      .on('click', d => this._onClick(d.name));
-  }
-
-  _updateRectangles() {
-    this.outerSvg.selectAll('.rect')
-      .attr('class', d => `rect ${d.name}`)
-      .attr('fill', d => d.color)
-      .attr('stroke', 'black')
-      .attr('stroke-width', (d) => {
-        if (d.name === this.state.selected) { return 6; }
-        return 0;
-      })
-      .on('click', d => this._onClick(d.name));
-  }
-
-  _onClick(clickedSquareName) {
-    this.state.selected = clickedSquareName;
-    this._redraw();
   }
 }
 
