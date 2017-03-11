@@ -108,32 +108,70 @@ class RankingPlot extends RhtmlSvgWidget {
     // console.log(this.yScale);
 
 
-
-
-    // let testData = [{x: 'Strongly agree', y: 1, color: 'blue'}];
-    // this.outerSvg.selectAll('.bar')
-    //     .data(testData)
-    //     .enter()
-    //     .append('rect')
-    //     .attr('class', 'bar')
-    //     .attr('x', (d) => this.xScale(d.x))
-    //     .attr('y', (d) => this.yScale(d.y) + this.yAxisStart)
-    //     .attr('width', (d) => this.xScale.band.bandwidth())
-    //     .attr('height', (d) => this.yScale(d.y))
-    //     .attr('fill', (d) => d.color);
-
+    let testData = [
+        {x: 'Strongly disagree', y: 0, color: 'blue'},
+        {x: 'Strongly disagree', y: 1, color: 'green'},
+        {x: 'Strongly disagree', y: 2, color: 'purple'},
+        {x: 'Strongly disagree', y: 3, color: 'yellow'},
+        {x: 'Strongly disagree', y: 4, color: 'brown'},
+        {x: 'Strongly disagree', y: 5, color: 'blue'},
+        {x: 'Strongly disagree', y: 6, color: 'purple'},
+        {x: 'Strongly disagree', y: 7, color: 'yellow'},
+        {x: 'Strongly disagree', y: 8, color: 'green'},
+        {x: 'Strongly disagree', y: 9, color: 'red'},
+        {x: 'Strongly agree', y: 0, color: 'blue'},
+        {x: 'Strongly agree', y: 1, color: 'green'},
+        {x: 'Strongly agree', y: 2, color: 'purple'},
+        {x: 'Strongly agree', y: 3, color: 'yellow'},
+        {x: 'Strongly agree', y: 4, color: 'brown'},
+        {x: 'Strongly agree', y: 5, color: 'blue'},
+        {x: 'Strongly agree', y: 6, color: 'purple'},
+        {x: 'Strongly agree', y: 7, color: 'yellow'},
+        {x: 'Strongly agree', y: 8, color: 'green'},
+        {x: 'Strongly agree', y: 9, color: 'red'},
+        {x: 'Somewhat disagree', y: 0, color: 'blue'},
+        {x: 'Somewhat disagree', y: 1, color: 'green'},
+        {x: 'Somewhat disagree', y: 2, color: 'purple'},
+        {x: 'Somewhat disagree', y: 3, color: 'yellow'},
+        {x: 'Somewhat disagree', y: 4, color: 'brown'},
+        {x: 'Somewhat disagree', y: 5, color: 'blue'},
+        {x: 'Somewhat disagree', y: 6, color: 'purple'},
+        {x: 'Somewhat disagree', y: 7, color: 'yellow'},
+        {x: 'Somewhat disagree', y: 8, color: 'green'},
+        {x: 'Somewhat disagree', y: 9, color: 'red'},
+        {x: 'Neither agree or disagree', y: 0, color: 'blue'},
+        {x: 'Neither agree or disagree', y: 1, color: 'green'},
+        {x: 'Neither agree or disagree', y: 2, color: 'purple'},
+        {x: 'Neither agree or disagree', y: 3, color: 'yellow'},
+        {x: 'Neither agree or disagree', y: 4, color: 'brown'},
+        {x: 'Neither agree or disagree', y: 5, color: 'blue'},
+        {x: 'Neither agree or disagree', y: 6, color: 'purple'},
+        {x: 'Neither agree or disagree', y: 7, color: 'yellow'},
+        {x: 'Neither agree or disagree', y: 8, color: 'green'},
+        {x: 'Neither agree or disagree', y: 9, color: 'red'},
+        {x: 'Somewhat agree', y: 0, color: 'blue'},
+        {x: 'Somewhat agree', y: 1, color: 'green'},
+        {x: 'Somewhat agree', y: 2, color: 'purple'},
+        {x: 'Somewhat agree', y: 3, color: 'yellow'},
+        {x: 'Somewhat agree', y: 4, color: 'brown'},
+        {x: 'Somewhat agree', y: 5, color: 'blue'},
+        {x: 'Somewhat agree', y: 6, color: 'purple'},
+        {x: 'Somewhat agree', y: 7, color: 'yellow'},
+        {x: 'Somewhat agree', y: 8, color: 'green'},
+        {x: 'Somewhat agree', y: 9, color: 'red'},
+        ];
+    this.outerSvg.selectAll('.bar')
+        .data(testData)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', (d) => this.xScaleBand(d.x))
+        .attr('y', (d) => this.yScale(d.y+.5))
+        .attr('width', (d) => this.xScaleBand.bandwidth())
+        .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
+        .attr('fill', (d) => d.color);
 
     let data = [];
-
-    // let enteringCells = this.outerSvg.selectAll('.node')
-    //                         .data(data)
-    //                         .enter()
-    //                         .append('text')
-    //     .attr('class', 'node')
-    //     .attr('x', d => d.x)
-    //     .attr('y', d => d.y)
-    //     .attr('text-anchor', 'end')
-    //     .text(d => d.label);
 
   }
 
@@ -156,24 +194,26 @@ class RankingPlot extends RhtmlSvgWidget {
     d3.select('.x-axis').selectAll('.domain').remove();
 
     let xAxisBBox = d3.selectAll('.x-axis').node().getBBox();
-    console.log(d3.selectAll('.x-axis').node());
     let yAxisStart = xAxisBBox.height + xAxisBBox.x;
+    this.yAxisStart = yAxisStart;
 
-    this.yScale = d3.scaleLinear().range([0,this.initialHeight - yAxisStart - 10]);
+    this.yScale = d3.scaleLinear()
+        .range([yAxisStart, this.initialHeight - 10])
+        .domain([1,10]);
     this.yAxis = d3.axisLeft()
         .scale(this.yScale)
         .ticks(10, '.')
         .tickFormat((d) => { return d + '.'; });
 
-    this.yScale.domain([1,10]);
     let yAxisSvg = this.outerSvg.append('g')
         .attr('class', 'y-axis')
         .call(this.yAxis);
     let yAxisBBox = d3.selectAll('.y-axis').node().getBBox();
 
-    d3.select('.y-axis').selectAll('.domain').remove();
-    yAxisSvg.attr('transform', 'translate(' + yAxisBBox.width + ',' + yAxisStart + ')');
+    yAxisSvg.attr('transform', 'translate(' + yAxisBBox.width + ',0)');
 
+    // Remove default styling
+    d3.select('.y-axis').selectAll('.domain').remove();
     d3.selectAll('.tick line').remove()
   }
 }
