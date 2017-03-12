@@ -178,7 +178,7 @@ class RankingPlot extends RhtmlSvgWidget {
   _updateLabels(bars) {
       bars.append('text')
           .attr('class', 'label')
-          .attr('color', 'white')
+          .attr('fill', 'white')
           .text((d) => d.text);
   }
 
