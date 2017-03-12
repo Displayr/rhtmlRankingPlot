@@ -45,7 +45,21 @@ let SvgUtils = function() {
                     }
                 }
             });
+        },
+
+        /** Add an ellipsis to a d3 selection containing a tspan. */
+        addEllipsisToTspan: function(tspan, width) {
+            // If the single word is too long, add ellipsis.
+            let text = tspan.text() + '...';
+            tspan.text(text);
+            // Keep removing characters from the end of the text until the text fits into the specified width
+            // or only the ellipsis is left.
+            while (text.length > 3 && (tspan.node()).getBBox().width > width) {
+                text = text.substring(0, text.length - 4) + '...';
+                tspan.text(text);
+            }
         }
+
     }
 };
 

@@ -180,6 +180,12 @@ class RankingPlot extends RhtmlSvgWidget {
           .attr('class', 'label')
           .attr('fill', 'white')
           .text((d) => d.text);
+
+      // Move label down to accommodate height
+      let labelHeight = d3.select('.label').node().getBBox().height;
+      d3.selectAll('text.label')
+        .attr('transform', 'translate(0,' + labelHeight + ')');
+
   }
 
   _updateBars(data) {
