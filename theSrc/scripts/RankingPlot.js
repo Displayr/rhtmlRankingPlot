@@ -167,17 +167,31 @@ class RankingPlot extends RhtmlSvgWidget {
 
   }
 
+  _updateRects(bars) {
+      bars.append('rect')
+          .attr('class', 'bar-rect')
+          .attr('width', (d) => this.xScaleBand.bandwidth())
+          .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
+          .attr('fill', (d) => d.color);
+  }
+
+  _updateLabels(bars) {
+      bars.append('text')
+          .attr('class', 'label')
+          .attr('color', 'white')
+          .text((d) => d.text);
+  }
+
   _updateBars(data) {
-    this.outerSvg.selectAll('.bar')
+    let barsSvg = this.outerSvg.selectAll('.bar')
         .data(data)
         .enter()
-        .append('rect')
+        .append('g')
         .attr('class', 'bar')
-        .attr('x', (d) => this.xScaleBand(d.x))
-        .attr('y', (d) => this.yScale(d.y+.5))
-        .attr('width', (d) => this.xScaleBand.bandwidth())
-        .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
-        .attr('fill', (d) => d.color);
+        .attr('transform', (d) => 'translate(' + this.xScaleBand(d.x) + ',' + this.yScale(d.y + .5) + ')');
+
+    this._updateRects(barsSvg);
+    this._updateLabels(barsSvg);
   }
 
   _updateAxis() {
