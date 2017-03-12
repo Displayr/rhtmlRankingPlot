@@ -176,16 +176,20 @@ class RankingPlot extends RhtmlSvgWidget {
   }
 
   _updateLabels(bars) {
-      bars.append('text')
-          .attr('class', 'label')
-          .attr('fill', 'white')
+      let textSvg = bars.append('text')
+                        .attr('fill', 'white')
+                        .attr('class', 'label-text');
+
+      textSvg.append('tspan')
+          .attr('class', 'label-tspan')
           .text((d) => d.text);
 
       // Move label down to accommodate height
-      let labelHeight = d3.select('.label').node().getBBox().height;
-      d3.selectAll('text.label')
+      let labelHeight = d3.select('.label-text').node().getBBox().height;
+      d3.selectAll('.label-text')
         .attr('transform', 'translate(0,' + labelHeight + ')');
 
+      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this.xScaleBand.bandwidth());
   }
 
   _updateBars(data) {
