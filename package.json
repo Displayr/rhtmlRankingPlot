@@ -75,6 +75,7 @@
     "sinon-chai": "^2.8.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "^1.0.0",
+    "watchify": "^3.9.0",
     "yargs": "^6.3.0"
   },
   "dependencies": {
@@ -82,7 +83,6 @@
     "d3-axis": "^1.0.6",
     "es6-promise": "^3.2.1",
     "jquery": "2.2.2",
-    "lodash": "4.6.1",
-    "watchify": "^3.9.0"
+    "lodash": "4.6.1"
   }
 }
