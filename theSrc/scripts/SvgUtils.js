@@ -22,6 +22,7 @@ let SvgUtils = function() {
             };
         },
 
+        // From Mike Bostock's block - https://bl.ocks.org/mbostock/7555321
         wrap: function(text, width) {
             text.each(function() {
                 let text = d3.select(this),
