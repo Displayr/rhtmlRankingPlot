@@ -58,6 +58,23 @@ let SvgUtils = function() {
                 text = text.substring(0, text.length - 4) + '...';
                 tspan.text(text);
             }
+        },
+
+        /** Generate the SVG string for a path. NOTE: coordinates are rounded to integers. */
+        renderPath: function(points, close = false) {
+            // Move to the first point.
+            let path = "M" + points[0].x.toFixed(0) + " " + points[0].y.toFixed(0);
+
+            // Generate line segments for subsequent points.
+            for (let i = 1; i < points.length; i++) {
+                path += " L" + points[i].x.toFixed(0) + " " + points[i].y.toFixed(0);
+            }
+
+            if (close) {
+                // Close the path.
+                path += " Z";
+            }
+            return path;
         }
 
     }
