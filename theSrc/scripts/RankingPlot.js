@@ -37,6 +37,10 @@ class RankingPlot extends RhtmlSvgWidget {
       'colLabels': {
         'top': 10,
         'bottom': 10
+      },
+
+      'col': {
+        'side': 5
       }
     };
     this.defaultNumColHeaderLines = 3;
@@ -170,7 +174,7 @@ class RankingPlot extends RhtmlSvgWidget {
   _updateRects(bars) {
       bars.append('rect')
           .attr('class', 'bar-rect')
-          .attr('width', (d) => this.xScaleBand.bandwidth())
+          .attr('width', (d) => this.xScaleBand.bandwidth() - this.defaultPadding.col.side)
           .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
           .attr('fill', (d) => d.color);
   }
@@ -189,7 +193,7 @@ class RankingPlot extends RhtmlSvgWidget {
       d3.selectAll('.label-text')
         .attr('transform', 'translate(0,' + labelHeight + ')');
 
-      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this.xScaleBand.bandwidth());
+      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this.xScaleBand.bandwidth() - this.defaultPadding.col.side);
   }
 
   _updateBars(data) {

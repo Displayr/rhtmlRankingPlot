@@ -1,6 +1,6 @@
 {
-  "widgetClassFile": "theSrc/scripts/Template.js",
-  "widgetEntryPoint": "theSrc/scripts/rhtmlTemplate.js",
-  "widgetName": "rhtmlTemplate",
-  "rFunction": "rhtmlTemplate::template"
+  "widgetClassFile": "theSrc/scripts/RankingPlot.js",
+  "widgetEntryPoint": "theSrc/scripts/rhtmlRanking.js",
+  "widgetName": "rhtmlRankingPlot",
+  "rFunction": "rhtmlRankingPlot::RankingPlot"
 }

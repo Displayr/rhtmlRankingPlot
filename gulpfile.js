@@ -6,7 +6,7 @@ const gulp = require('gulp');
 const _ = require('lodash');
 const $ = require('gulp-load-plugins')();
 const fs = Promise.promisifyAll(require('fs-extra'));
-const opn = require('opn')
+const opn = require('opn');
 const runSequence = require('run-sequence');
 
 const widgetConfig = require('./build/config/widget.config.json');
