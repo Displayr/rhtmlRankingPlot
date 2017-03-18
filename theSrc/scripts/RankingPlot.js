@@ -7,6 +7,8 @@ import _ from 'lodash';
 import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
 import SvgUtils from './SvgUtils';
+import Point from './Point.js';
+import Flow from './Flow.js';
 import * as d3 from "d3";
 
 class RankingPlot extends RhtmlSvgWidget {
@@ -166,17 +168,133 @@ class RankingPlot extends RhtmlSvgWidget {
         ];
 
     this._updateBars(testData);
+    let f = new Flow('0', [new Point('Strongly disagree',0), new Point('Somewhat disagree',1)]);
+    this._renderFlow(f, .5);
 
     let data = [];
 
   }
 
+  _renderFlow(flow, opacity) {
+      let id = flow.id;
+      let plot = this.outerSvg;
+      // let colour = this._flowColour(id);
+      let colour = 'green';
+      // let hilight_colour = RankingPlot._highlightColour(colour);
+      let highlight = function () {
+          d3.select(this).attr('fill', 'yellow'); //hilight_colour);
+      };
+      let unhighlight = function () {
+          let colour = d3.select(this).attr('flow-colour');
+          d3.select(this).attr('fill', colour);
+      };
+      // let animate = this.lastRankings != null;
+      // let path = animate ? this._renderPreviousPath(flow) : this._renderFlowPath(flow.items);
+      let path = this._renderFlowPath(flow.positions);
+      console.log('here');
+      console.log(path);
+      let path_node = plot.append("path")
+          .attr('flow-id', id)
+          .attr('flow-colour', colour)
+          .attr('fill', colour)
+          .attr('d', path)
+          .style("opacity", opacity);
+
+      // let on_mouseover = function (d, i) {
+      //     plot.selectAll("[flow-id='" + id + "']").transition()
+      //         .ease('cubic-out')
+      //         .duration(200)
+      //         .each(highlight);
+      // };
+      // let on_mouseout = function (d, i) {
+      //     plot.selectAll("[flow-id='" + id + "']").transition()
+      //         .ease('cubic-out')
+      //         .duration(200)
+      //         .each(unhighlight);
+      // };
+//     if (animate)
+//         path_node.transition()
+//             .duration(this.displaySettings.animationDuration)
+//             .attr('d', this._renderFlowPath(flow.items))
+//             // Add mouseover event handlers after the transition
+//             // so that they don't interfere with the transition.
+//             .each('end', function () {
+//                 d3.select(this)
+//                     .on('mouseover', on_mouseover)
+//                     .on('mouseout', on_mouseout)
+//             });
+//     else
+//         path_node
+//             .on('mouseover', on_mouseover)
+//             .on('mouseout', on_mouseout);
+//     }
+  }
+
+  /** Generate the string of SVG path commands to render a flow. */
+  _renderFlowPath(flow) {
+    return SvgUtils().renderPath(this._makeFlowPath(flow), true);
+  }
+  
+  /** Trace the path around a flow.
+   * If renderFirstItem / renderLastItem are set to false,
+   * the connection to the first / last item are added, but the item itself is not rendered. */
+  _makeFlowPath(flow, renderFirstItem = true, renderLastItem = true) {
+    let item_width = this._itemWidth;
+    let item_height = this._itemHeight;
+    
+    let path = [];
+    
+    let start_i = renderFirstItem ? 0 : 1;
+    let end_i   = flow.length - (renderLastItem ? 0 : 1);
+    
+    if (!renderFirstItem) {
+      let item = flow[0];
+      // Add top right corner of the first item.
+      let pos = this._itemPosition(item.x, item.y);
+      path.push(new Point(pos.x + item_width, pos.y));
+    }
+    
+    // Add points for the top edge of the flow in left to right order.
+    for (let i = start_i; i < end_i; i++) {
+      let item = flow[i];
+      // Add a line segment for the top of the i-th item.
+      let pos = this._itemPosition(item.x, item.y);
+      path.push(pos, new Point(pos.x + item_width, pos.y));
+    }
+    
+    if (!renderLastItem) {
+      let item = flow[length - 1];
+      // Extend the path to the leftmost edge of the last item.
+      let pos = this._itemPosition(item.x, item.y);
+      path.push(pos, new Point(pos.x, pos.y + item_height));
+    }
+    
+    // Add points for the bottom edge of the flow in right to left order.
+    for (let i = end_i - 1; i >= start_i; i--) {
+      let item = flow[i];
+      // Add a line segment for the bottom of the i-th item.
+      let pos = this._itemPosition(item.x, item.y);
+      pos.y += item_height;
+      path.push(new Point(pos.x + item_width, pos.y), pos);
+    }
+    
+    if (!renderFirstItem) {
+      let item = flow[0];
+      // Add bottom right corner of the first item.
+      let pos = this._itemPosition(item.x, item.y);
+      path.push(new Point(pos.x + item_width, pos.y + item_width));
+    }
+    console.log('end');
+    console.log(path);
+    return path;
+  }
+
   _updateRects(bars) {
-      bars.append('rect')
-          .attr('class', 'bar-rect')
-          .attr('width', (d) => this.xScaleBand.bandwidth() - this.defaultPadding.col.side)
-          .attr('height', (d) => this.yScale(d.y+1) - this.yScale(d.y))
-          .attr('fill', (d) => d.color);
+    bars.append('rect')
+        .attr('class', 'bar-rect')
+        .attr('width', (d) => this._itemWidth)
+        .attr('height', (d) => this._itemHeight)
+        .attr('fill', (d) => d.color);
   }
 
   _updateLabels(bars) {
@@ -193,17 +311,30 @@ class RankingPlot extends RhtmlSvgWidget {
       d3.selectAll('.label-text')
         .attr('transform', 'translate(0,' + labelHeight + ')');
 
-      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this.xScaleBand.bandwidth() - this.defaultPadding.col.side);
+      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this._itemWidth);
   }
 
+  _itemPosition(col, row) {
+    return new Point(this.xScaleBand(col), this.yScale(row + .5));
+  }
+  
   _updateBars(data) {
     let barsSvg = this.outerSvg.selectAll('.bar')
         .data(data)
         .enter()
         .append('g')
         .attr('class', 'bar')
-        .attr('transform', (d) => 'translate(' + this.xScaleBand(d.x) + ',' + this.yScale(d.y + .5) + ')');
-
+        .attr('transform', (d) => {
+          // console.log('updateBars');
+          let pos = this._itemPosition(d.x, d.y);
+          // console.log(`${d.x}, ${d.y}`);
+          // console.log(pos);
+          return 'translate(' + pos.x + ',' + pos.y + ')';
+        });
+  
+    this._itemHeight = this.yScale(1) - this.yScale(0);
+    this._itemWidth = this.xScaleBand.bandwidth() - this.defaultPadding.col.side;
+    
     this._updateRects(barsSvg);
     this._updateLabels(barsSvg);
   }

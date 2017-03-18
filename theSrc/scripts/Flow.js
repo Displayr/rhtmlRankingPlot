@@ -5,3 +5,7 @@ class Flow {
         this.positions = positions;
     }
 }
+
+if (typeof(module) !== 'undefined') {
+  module.exports = Flow;
+}

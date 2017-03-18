@@ -1964,9 +1964,7 @@ module RankingPlot {
         }
 
         /** Top left corner of flow item, relative to plot area (not including any axis labels) */
-        private _itemPosition(col: number, row: number): Point {
-            return new Point(this._horizontalSpacing * col, this._itemHeight * row);
-        }
+        Flow
 
         /**
          * If there is no width or height set,
