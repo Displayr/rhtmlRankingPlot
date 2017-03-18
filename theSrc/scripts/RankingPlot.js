@@ -110,8 +110,6 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log(this.outerSvg);
     console.log('------------');
     this._updateAxis();
-    // console.log(this.xScale);
-    // console.log(this.yScale);
 
 
     let testData = [
@@ -179,7 +177,7 @@ class RankingPlot extends RhtmlSvgWidget {
       let id = flow.id;
       let plot = this.outerSvg;
       // let colour = this._flowColour(id);
-      let colour = 'green';
+      let colour = 'yellow';
       // let hilight_colour = RankingPlot._highlightColour(colour);
       let highlight = function () {
           d3.select(this).attr('fill', 'yellow'); //hilight_colour);
@@ -191,8 +189,6 @@ class RankingPlot extends RhtmlSvgWidget {
       // let animate = this.lastRankings != null;
       // let path = animate ? this._renderPreviousPath(flow) : this._renderFlowPath(flow.items);
       let path = this._renderFlowPath(flow.positions);
-      console.log('here');
-      console.log(path);
       let path_node = plot.append("path")
           .attr('flow-id', id)
           .attr('flow-colour', colour)
@@ -284,8 +280,6 @@ class RankingPlot extends RhtmlSvgWidget {
       let pos = this._itemPosition(item.x, item.y);
       path.push(new Point(pos.x + item_width, pos.y + item_width));
     }
-    console.log('end');
-    console.log(path);
     return path;
   }
 
@@ -325,10 +319,7 @@ class RankingPlot extends RhtmlSvgWidget {
         .append('g')
         .attr('class', 'bar')
         .attr('transform', (d) => {
-          // console.log('updateBars');
           let pos = this._itemPosition(d.x, d.y);
-          // console.log(`${d.x}, ${d.y}`);
-          // console.log(pos);
           return 'translate(' + pos.x + ',' + pos.y + ')';
         });
   
