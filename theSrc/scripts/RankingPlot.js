@@ -81,6 +81,7 @@ class RankingPlot extends RhtmlSvgWidget {
       this.cols = [];
       for(let i = 0; i < this.config.cols.length; i++) {
         this.cols.push( {
+          'id': i,
           'label': this.config.cols[i],
           'length': this.config.cols[i].length
         });
@@ -111,6 +112,9 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log('------------');
     this._updateAxis();
 
+    let testInputData = [
+      
+    ]
 
     let testData = [
         {x: 'Strongly disagree', y: 0, color: 'blue', text: 'I am a free spirit.'},
@@ -123,29 +127,19 @@ class RankingPlot extends RhtmlSvgWidget {
         {x: 'Strongly disagree', y: 7, color: 'yellow', text: 'I am a free spirit.'},
         {x: 'Strongly disagree', y: 8, color: 'green', text: 'I am a free spirit.'},
         {x: 'Strongly disagree', y: 9, color: 'red', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 0, color: 'blue', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 1, color: 'green', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 2, color: 'purple', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 3, color: 'yellow', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 4, color: 'brown', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 5, color: 'blue', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 6, color: 'purple', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 7, color: 'yellow', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 8, color: 'green', text: 'I am a free spirit.'},
-        {x: 'Strongly agree', y: 9, color: 'red', text: 'I am a free spirit.'},
-        {x: 'Somewhat disagree', y: 0, color: 'blue', text: 'I am a free spirit.'},
-        {x: 'Somewhat disagree', y: 1, color: 'green', text: 'I am a free spirit.'},
+        {x: 'Somewhat disagree', y: 0, color: 'green', text: 'I am a free spirit.'},
+        {x: 'Somewhat disagree', y: 1, color: 'blue', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 2, color: 'purple', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 3, color: 'yellow', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 4, color: 'brown', text: 'I am a free spirit.'},
-        {x: 'Somewhat disagree', y: 5, color: 'blue', text: 'I am a free spirit.'},
+        {x: 'Somewhat disagree', y: 5, color: 'yellow', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 6, color: 'purple', text: 'I am a free spirit.'},
-        {x: 'Somewhat disagree', y: 7, color: 'yellow', text: 'I am a free spirit.'},
+        {x: 'Somewhat disagree', y: 7, color: 'blue', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 8, color: 'green', text: 'I am a free spirit.'},
         {x: 'Somewhat disagree', y: 9, color: 'red', text: 'I am a free spirit.'},
-        {x: 'Neither agree or disagree', y: 0, color: 'blue', text: 'I am a free spirit.'},
+        {x: 'Neither agree or disagree', y: 0, color: 'purple', text: 'I am a free spirit.'},
         {x: 'Neither agree or disagree', y: 1, color: 'green', text: 'I am a free spirit.'},
-        {x: 'Neither agree or disagree', y: 2, color: 'purple', text: 'I am a free spirit.'},
+        {x: 'Neither agree or disagree', y: 2, color: 'blue', text: 'I am a free spirit.'},
         {x: 'Neither agree or disagree', y: 3, color: 'yellow', text: 'I am a free spirit.'},
         {x: 'Neither agree or disagree', y: 4, color: 'brown', text: 'I am a free spirit.'},
         {x: 'Neither agree or disagree', y: 5, color: 'blue', text: 'I am a free spirit.'},
@@ -163,21 +157,41 @@ class RankingPlot extends RhtmlSvgWidget {
         {x: 'Somewhat agree', y: 7, color: 'yellow', text: 'I am a free spirit.'},
         {x: 'Somewhat agree', y: 8, color: 'green', text: 'I am a free spirit.'},
         {x: 'Somewhat agree', y: 9, color: 'red', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 0, color: 'green', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 1, color: 'blue', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 2, color: 'purple', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 3, color: 'yellow', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 4, color: 'brown', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 5, color: 'blue', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 6, color: 'purple', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 7, color: 'yellow', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 8, color: 'green', text: 'I am a free spirit.'},
+        {x: 'Strongly agree', y: 9, color: 'red', text: 'I am a free spirit.'},
         ];
 
+    let f = new Flow('0',
+      [
+        new Point(this._mapColNumToName(0),0),
+        new Point(this._mapColNumToName(1),1),
+        new Point(this._mapColNumToName(2),2)
+      ]
+    );
+    this._renderFlow(f, 1);
     this._updateBars(testData);
-    let f = new Flow('0', [new Point('Strongly disagree',0), new Point('Somewhat disagree',1)]);
-    this._renderFlow(f, .5);
 
     let data = [];
 
   }
-
+  
+  _mapColNumToName(colNum) {
+    return (_.find(this.cols, (o) => o.id == colNum)).label;
+  }
+  
   _renderFlow(flow, opacity) {
       let id = flow.id;
       let plot = this.outerSvg;
       // let colour = this._flowColour(id);
-      let colour = 'yellow';
+      let colour = 'blue';
       // let hilight_colour = RankingPlot._highlightColour(colour);
       let highlight = function () {
           d3.select(this).attr('fill', 'yellow'); //hilight_colour);
@@ -293,7 +307,7 @@ class RankingPlot extends RhtmlSvgWidget {
 
   _updateLabels(bars) {
       let textSvg = bars.append('text')
-                        .attr('fill', 'white')
+                        .attr('fill', 'black')
                         .attr('class', 'label-text');
 
       textSvg.append('tspan')
@@ -323,9 +337,6 @@ class RankingPlot extends RhtmlSvgWidget {
           return 'translate(' + pos.x + ',' + pos.y + ')';
         });
   
-    this._itemHeight = this.yScale(1) - this.yScale(0);
-    this._itemWidth = this.xScaleBand.bandwidth() - this.defaultPadding.col.side;
-    
     this._updateRects(barsSvg);
     this._updateLabels(barsSvg);
   }
@@ -334,11 +345,11 @@ class RankingPlot extends RhtmlSvgWidget {
     // Determine width of largest maxRows
     _.extend(this.maxRows, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxRows.text));
 
-    this.xScaleBand = d3.scaleBand().range([this.maxRows.width, this.initialWidth]).round([.1, .3]);
+    this.xScaleBand = d3.scaleBand()
+                        .range([this.maxRows.width, this.initialWidth])
+                        .domain(_.map(this.cols, (o) => o.label))
+                        .round([.1, .3]);
     this.xAxis = d3.axisBottom().scale(this.xScaleBand);
-
-    this.xScaleBand.domain(_.map(this.cols, (o) => o.label));
-
 
     this.outerSvg.append('g')
         .attr('class', 'x-axis')
@@ -369,7 +380,10 @@ class RankingPlot extends RhtmlSvgWidget {
 
     // Remove default styling
     d3.select('.y-axis').selectAll('.domain').remove();
-    d3.selectAll('.tick line').remove()
+    d3.selectAll('.tick line').remove();
+  
+    this._itemHeight = this.yScale(1) - this.yScale(0);
+    this._itemWidth = this.xScaleBand.bandwidth() - this.defaultPadding.col.side;
   }
 }
 
