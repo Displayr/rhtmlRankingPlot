@@ -307,7 +307,7 @@ class RankingPlot extends RhtmlSvgWidget {
 
   _updateLabels(bars) {
       let textSvg = bars.append('text')
-                        .attr('fill', 'black')
+                        .attr('fill', 'white')
                         .attr('class', 'label-text');
 
       textSvg.append('tspan')
