@@ -1,6 +1,10 @@
 /** A group of items in rank order plus a label for the group */
 class RankingDataObj {
     
+    rankItems(rows, cols) {
+    
+    }
+    
     constructor(rows, cols) {
         console.log('lksjdfds');
         console.log(cols);
