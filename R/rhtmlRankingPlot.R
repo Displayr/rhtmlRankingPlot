@@ -1,8 +1,6 @@
-# TEMPLATE! - update the method descriptions.
-
-#' rhtmlTemplate HTML Widget
+#' rhtmlRankingPlot HTML Widget
 #'
-#' @description A HTMLWidget that ...
+#' @description A HTMLWidget that creates a ranked order plot of the given input data.
 #'
 #' @section Usage Scenarios:
 #'
@@ -12,19 +10,18 @@
 #'
 #' @examples
 #'
-#' rhtmlTemplate::template('{}')
+#' rhtmlRankingPlot::RankingPlot('{}')
 #'
-#' @author First Last <first.last@gmail.com>
+#' @author Po Liu <po.liu@displayr.com>
 #'
-#' @source https://github.com/Displayr/rhtmlTemplate
+#' @source https://github.com/Displayr/rhtmlRankingPlot
 #'
 #' @import htmlwidgets
 #'
 #' @export
 #'
 
-# TEMPLATE! - update the function name
-template <- function(settingsJsonString = '{}') {
+RankingPlot <- function(settingsJsonString = '{}') {
 
   DEFAULT_WIDGET_WIDTH <- 600
   DEFAULT_WIDGET_HEIGHT <- 600
@@ -53,8 +50,7 @@ template <- function(settingsJsonString = '{}') {
   }
 
   htmlwidgets::createWidget(
-    # TEMPLATE! - update the name here
-    name = 'rhtmlTemplate',
+    name = 'rhtmlRankingPlot',
     settingsJsonString,
     width = width,
     height = height,
@@ -65,7 +61,6 @@ template <- function(settingsJsonString = '{}') {
       viewer.fill = TRUE,
       padding = 0
     ),
-    # TEMPLATE! - update the name here
-    package = 'rhtmlTemplate'
+    package = 'rhtmlRankingPlot'
   )
 }

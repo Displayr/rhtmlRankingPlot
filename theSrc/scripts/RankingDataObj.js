@@ -1,15 +1,22 @@
 /** A group of items in rank order plus a label for the group */
 class RankingDataObj {
     
-    rankItems(rows, cols) {
-    
-    }
-    
-    constructor(rows, cols) {
-        console.log('lksjdfds');
+    _rankItems(rows, cols) {
         console.log(cols);
         console.log(rows);
         
+        let rank = [];
+        
+        
+        for(let i=0; i<rows[0].length; i++) {
+            rows = _.sortBy(rows, (o) => o[i]);
+            console.log(_.map(rows, (o) => o[i]));
+        }
+    }
+    
+    constructor(rows, cols) {
+        console.log('RankingDataObj constructor');
+        this._rankItems(_.values(rows), cols);
         
         
         // ------------------
