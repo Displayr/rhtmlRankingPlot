@@ -12,6 +12,8 @@ class RankingDataObj {
             rows = _.sortBy(rows, (o) => o[i]);
             console.log(_.map(rows, (o) => o[i]));
         }
+        
+        // TODO: will need to preserve the label for each row after the sort. Figure out first!
     }
     
     constructor(rows, cols) {
