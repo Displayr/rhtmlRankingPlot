@@ -8,8 +8,9 @@ import RankingDependency from './RankingDependency';
 import RhtmlSvgWidget from './rhtmlSvgWidget';
 import SvgUtils from './SvgUtils';
 import Point from './Point.js';
+import RankingDataObj from './RankingDataObj';
 import Flow from './Flow.js';
-import * as d3 from "d3";
+import * as d3 from 'd3';
 
 class RankingPlot extends RhtmlSvgWidget {
 
@@ -108,13 +109,15 @@ class RankingPlot extends RhtmlSvgWidget {
 
   _redraw() {
     console.log('_redraw');
-    console.log(this.outerSvg);
+    console.log(this.rows);
     console.log('------------');
     this._updateAxis();
+    let rData = new RankingDataObj(this.rows, this.cols);
+    
 
     let testInputData = [
-      
-    ]
+    
+    ];
 
     let testData = [
         {x: 'Strongly disagree', y: 0, color: 'blue', text: 'I am a free spirit.'},
