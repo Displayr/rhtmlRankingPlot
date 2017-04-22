@@ -14,6 +14,7 @@ class RankingDataObj {
         }
         
         // TODO: will need to preserve the label for each row after the sort. Figure out first!
+        
     }
     
     constructor(rows, cols) {
