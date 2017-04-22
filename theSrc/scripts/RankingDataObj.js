@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /** A group of items in rank order plus a label for the group */
 class RankingDataObj {
     
@@ -7,18 +9,50 @@ class RankingDataObj {
         
         let rank = [];
         
+        _.each(rows, function(row, index) {
+           row.push(index);
+        });
         
-        for(let i=0; i<rows[0].length; i++) {
-            rows = _.sortBy(rows, (o) => o[i]);
-            console.log(_.map(rows, (o) => o[i]));
+        
+        for(let i=0; i<rows[0].length -1; i++) {
+            let rankedRowsIds = _.map(_.sortBy(rows, (o) => o[i]), (r) => _.last(r));
+            
+            // Take the top 10 of each
+            let truncateNum = rankedRowsIds.length - 10;
+            rankedRowsIds = _.dropRight(rankedRowsIds.reverse(), truncateNum);
+            
+            _.each(rankedRowsIds, (rankedRowId) => {
+                this.rankedItems.push({
+                  r:    rankedRowId,
+                  c:    this._idToColName(i),
+                  text: this._idToRowName(rankedRowId)
+                });
+            });
+            // console.log(_.map(rankedRows, (o) => o[i]));
         }
+        console.log(this.rankedItems);
         
-        // TODO: will need to preserve the label for each row after the sort. Figure out first!
+        // TODO: Create color class and map onto each box
+        // TODO: Calculate ties
         
     }
     
+    _idToColName(id) {
+        return this.colNames[id].label;
+    }
+    
+    _idToRowName(id) {
+        return this.rowNames[id];
+    }
+    
     constructor(rows, cols) {
+        this.rankedItems = [];
+        
+        
         console.log('RankingDataObj constructor');
+        this.colNames = cols;
+        this.rowNames = _.keys(rows);
+        
         this._rankItems(_.values(rows), cols);
         
         
@@ -26,7 +60,6 @@ class RankingDataObj {
         this.label = [];
   
         /** Array of unique (per this structure) ids in rank order */
-        this.items = [];
   
           /**
            * Indices of values that are tied with the following value
