@@ -245,7 +245,7 @@ class RankingPlot extends RhtmlSvgWidget {
 
   /** Generate the string of SVG path commands to render a flow. */
   _renderFlowPath(flow) {
-    return SvgUtils().renderPath(this._makeFlowPath(flow), true);
+    return SvgUtils.renderPath(this._makeFlowPath(flow), true);
   }
   
   /** Trace the path around a flow.
@@ -322,7 +322,7 @@ class RankingPlot extends RhtmlSvgWidget {
       d3.selectAll('.label-text')
         .attr('transform', 'translate(0,' + labelHeight + ')');
 
-      SvgUtils().addEllipsisToTspan(d3.selectAll('.label-tspan'), this._itemWidth);
+      SvgUtils.addEllipsisToTspan(d3.selectAll('.label-tspan'), this._itemWidth);
   }
 
   _itemPosition(col, row) {
@@ -346,7 +346,7 @@ class RankingPlot extends RhtmlSvgWidget {
 
   _updateAxis() {
     // Determine width of largest maxRows
-    _.extend(this.maxRows, SvgUtils().getTextSvgDimensions(this.outerSvg, this.maxRows.text));
+    _.extend(this.maxRows, SvgUtils.getTextSvgDimensions(this.outerSvg, this.maxRows.text));
 
     this.xScaleBand = d3.scaleBand()
                         .range([this.maxRows.width, this.initialWidth])
@@ -359,7 +359,7 @@ class RankingPlot extends RhtmlSvgWidget {
         .attr('transform', 'translate(0 ,0)')
         .call(this.xAxis)
         .selectAll('.tick text')
-        .call(SvgUtils().wrap, this.xScaleBand.bandwidth());
+        .call(SvgUtils.wrap, this.xScaleBand.bandwidth());
     d3.select('.x-axis').selectAll('.domain').remove();
 
     let xAxisBBox = d3.selectAll('.x-axis').node().getBBox();
