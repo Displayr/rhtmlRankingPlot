@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Colors from './Colors';
 
 /** A group of items in rank order plus a label for the group */
 class RankingDataObj {
@@ -22,10 +23,12 @@ class RankingDataObj {
             rankedRowsIds = _.dropRight(rankedRowsIds.reverse(), truncateNum);
             
             _.each(rankedRowsIds, (rankedRowId) => {
+                let rowLabel = this._idToRowName(rankedRowId);
                 this.rankedItems.push({
                   r:    rankedRowId,
                   c:    this._idToColName(i),
-                  text: this._idToRowName(rankedRowId)
+                  text: rowLabel,
+                  color: this.colors.getColor(rowLabel)
                 });
             });
             // console.log(_.map(rankedRows, (o) => o[i]));
@@ -52,6 +55,7 @@ class RankingDataObj {
         console.log('RankingDataObj constructor');
         this.colNames = cols;
         this.rowNames = _.keys(rows);
+        this.colors = new Colors(_.keys(rows));
         
         this._rankItems(_.values(rows), cols);
         
