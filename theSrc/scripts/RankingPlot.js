@@ -112,7 +112,9 @@ class RankingPlot extends RhtmlSvgWidget {
     console.log(this.rows);
     console.log('------------');
     this._updateAxis();
-    let rData = new RankingDataObj(this.rows, this.cols);
+    let rankData = new RankingDataObj(this.rows, this.cols);
+    console.log('rankedData');
+    console.log(rankData);
     
 
     let testInputData = [
@@ -120,7 +122,7 @@ class RankingPlot extends RhtmlSvgWidget {
     ];
 
     let testData = [
-        {c: 'Strongly disagree', r: 0, color: 'blue', text: 'I am a free spirit.'},
+        {c: 'Strongly disagree', r: 0, color: 'blue', text: 'ADflksjdfalsf.'},
         {c: 'Strongly disagree', r: 1, color: 'green', text: 'I am a free spirit.'},
         {c: 'Strongly disagree', r: 2, color: 'purple', text: 'I am a free spirit.'},
         {c: 'Strongly disagree', r: 3, color: 'yellow', text: 'I am a free spirit.'},
@@ -180,7 +182,7 @@ class RankingPlot extends RhtmlSvgWidget {
       ]
     );
     this._renderFlow(f, 1);
-    this._updateBars(testData);
+    this._updateBars(rankData);
 
     let data = [];
 
@@ -315,14 +317,16 @@ class RankingPlot extends RhtmlSvgWidget {
 
       textSvg.append('tspan')
           .attr('class', 'label-tspan')
-          .text((d) => d.text);
+          .text((d) => { return d.text; });
 
       // Move label down to accommodate height
       let labelHeight = d3.select('.label-text').node().getBBox().height;
       d3.selectAll('.label-text')
         .attr('transform', 'translate(0,' + labelHeight + ')');
 
-      SvgUtils.addEllipsisToTspan(d3.selectAll('.label-tspan'), this._itemWidth);
+      _.each(d3.selectAll('.label-tspan').nodes(), (n) => {
+        SvgUtils.addEllipsisToTspan(d3.select(n), this._itemWidth);
+      });
   }
 
   _itemPosition(col, row) {

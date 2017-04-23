@@ -31,11 +31,9 @@ class RankingDataObj {
                   color: this.colors.getColor(rowLabel)
                 });
             });
-            // console.log(_.map(rankedRows, (o) => o[i]));
         }
         console.log(this.rankedItems);
         
-        // TODO: Create color class and map onto each box
         // TODO: Calculate ties
         
     }
@@ -73,7 +71,10 @@ class RankingDataObj {
   
         /** If values are supplied, they are shown on each ranked item. */
         this.values = [];
+        
+        return this.rankedItems;
     }
+    
 }
 
 module.exports = RankingDataObj;
