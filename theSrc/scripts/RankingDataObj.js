@@ -22,10 +22,10 @@ class RankingDataObj {
             let truncateNum = rankedRowsIds.length - 10;
             rankedRowsIds = _.dropRight(rankedRowsIds.reverse(), truncateNum);
             
-            _.each(rankedRowsIds, (rankedRowId) => {
+            _.each(rankedRowsIds, (rankedRowId, rowIndex) => {
                 let rowLabel = this._idToRowName(rankedRowId);
                 this.rankedItems.push({
-                  r:    rankedRowId,
+                  r:    rowIndex,
                   c:    this._idToColName(i),
                   text: rowLabel,
                   color: this.colors.getColor(rowLabel)
