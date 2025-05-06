@@ -1,0 +1,18 @@
+name: Build rhtmlRankingPlot
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    name: Build rhtmlRankingPlot
+    permissions:
+      checks: write
+      contents: read
+    uses: Displayr/nixr-public/.github/workflows/build-flake-installable.yaml@master
+    with:
+      installable-path: pkgs.x86_64-linux.rPackages.rhtmlRankingPlot
+      build-args: --override-input rhtmlRankingPlot .
+      installable-name: rhtmlRankingPlot
+    secrets: inherit
