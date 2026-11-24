@@ -3,7 +3,6 @@
 browser
 node_modules
 .RData
-.Rbuildignore
 .Rhistory
 .Rproj.user
 *.Rproj
